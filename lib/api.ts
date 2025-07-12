@@ -33,13 +33,14 @@ interface UpdateUserRequest {
   profilePicture?: string
 }
 
-import type { BookSearchResultDto, BookDetails } from "@/types/books"
+import type { BookSearchResponse, BookDetails } from "@/types/books"
 
-interface BookSearchResponse {
-  docs: BookSearchResultDto[]
-  numFound: number
-  start: number
-}
+import type {
+  Review,
+  CreateReviewPayload,
+  UpdateReviewPayload,
+  ToggleLikeResponse,
+} from "@/types/reviews"
 
 class ApiClient {
   private baseUrl: string
@@ -187,6 +188,40 @@ class ApiClient {
 
   async getBookDetails(isbn: string): Promise<BookDetails> {
     return this.request<BookDetails>(`/books/isbn/${isbn}`)
+  }
+
+  // Review endpoints
+  async createReview(payload: CreateReviewPayload): Promise<Review> {
+    return this.request<Review>("/reviews", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    })
+  }
+
+  async getReviewsByBook(openLibraryId: string): Promise<Review[]> {
+    return this.request<Review[]>(`/reviews/book/${openLibraryId}`)
+  }
+
+  async toggleLikeReview(reviewId: string): Promise<ToggleLikeResponse> {
+    return this.request<ToggleLikeResponse>(`/reviews/${reviewId}/like`, {
+      method: "POST",
+    })
+  }
+
+  async updateReview(
+    reviewId: string,
+    payload: UpdateReviewPayload
+  ): Promise<Review> {
+    return this.request<Review>(`/reviews/${reviewId}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    })
+  }
+
+  async deleteReview(reviewId: string): Promise<void> {
+    await this.request(`/reviews/${reviewId}}`, {
+      method: "DELETE",
+    })
   }
 }
 
