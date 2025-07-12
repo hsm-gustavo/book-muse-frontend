@@ -1,103 +1,138 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import Link from "next/link"
+import { motion } from "motion/react"
+import { AnimatedButton } from "@/components/ui/animated-button"
+import { PageTransition } from "@/components/ui/page-transition"
+import { FloatingElements } from "@/components/ui/floating-elements"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { BookOpen, Users, Star, TrendingUp } from "lucide-react"
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <PageTransition>
+      <div className="min-h-screen bg-gradient-to-br from-pastel-blue via-pastel-purple to-pastel-pink">
+        <FloatingElements />
+        <div className="container mx-auto px-4 py-16">
+          <div className="text-center space-y-8">
+            <motion.h1
+              className="text-6xl font-bold bg-gradient-to-r from-gradient-purple to-gradient-pink bg-clip-text text-transparent"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Welcome to BookMuse
+            </motion.h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <motion.p
+              className="text-xl text-foreground/80 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Discover, track, and share your reading journey. Join thousands of
+              book lovers who use BookMuse to organize their literary
+              adventures.
+            </motion.p>
+
+            <motion.div
+              className="flex gap-4 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <AnimatedButton
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-gradient-purple to-gradient-pink hover:opacity-90"
+              >
+                <Link href="/signup">Get Started</Link>
+              </AnimatedButton>
+              <AnimatedButton
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-gradient-purple text-gradient-purple hover:bg-pastel-purple bg-transparent"
+              >
+                <Link href="/login">Sign In</Link>
+              </AnimatedButton>
+              <AnimatedButton
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-gradient-blue text-gradient-blue hover:bg-pastel-blue bg-transparent"
+              >
+                <Link href="/books">Browse Books</Link>
+              </AnimatedButton>
+            </motion.div>
+          </div>
+
+          <motion.div
+            className="mt-20 grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <Card className="border-accent-blue/20 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <BookOpen className="h-12 w-12 mx-auto text-gradient-purple mb-2" />
+                <CardTitle className="text-lg">Track Reading</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-center">
+                  Keep track of books you&apos;re reading, want to read, or have
+                  finished.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="border-accent-purple/20 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <Star className="h-12 w-12 mx-auto text-gradient-pink mb-2" />
+                <CardTitle className="text-lg">Write Reviews</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-center">
+                  Share your thoughts and rate books to help other readers
+                  discover great content.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="border-accent-green/20 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <Users className="h-12 w-12 mx-auto text-gradient-purple mb-2" />
+                <CardTitle className="text-lg">Follow Friends</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-center">
+                  Connect with fellow book lovers and see what they&apos;re
+                  reading and reviewing.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="border-accent-yellow/20 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <TrendingUp className="h-12 w-12 mx-auto text-gradient-pink mb-2" />
+                <CardTitle className="text-lg">Discover Books</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-center">
+                  Explore millions of books from the Open Library and find your
+                  next favorite read.
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </div>
+    </PageTransition>
+  )
 }
