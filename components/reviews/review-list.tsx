@@ -1,12 +1,12 @@
 "use client"
 
-import type { Review, ToggleLikeResponse } from "@/types/reviews"
+import type { Review } from "@/types/reviews"
 import { ReviewItem } from "./review-item"
 import { motion } from "motion/react"
 
 interface ReviewListProps {
   reviews: Review[]
-  onLikeToggle: (reviewId: string) => Promise<ToggleLikeResponse>
+  onLikeToggle: (reviewId: string) => Promise<void>
   onEdit: (review: Review) => void
   onDelete: (reviewId: string) => Promise<void>
   isLoading?: boolean

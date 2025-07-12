@@ -153,13 +153,18 @@ export function useReviews(openLibraryId: string | undefined) {
 
     const currentUserId = user.id
 
+    const currentReviews = reviews || []
+    const currentReview = currentReviews.find((r) => r.id === reviewId)
+    if (!currentReview) throw new Error("Review not found")
+
+    const isCurrentlyLiked = currentReview.likes.some(
+      (like) => like.userId === currentUserId
+    )
+
     await mutate(
       async (currentReviews) => {
         return currentReviews?.map((review) => {
           if (review.id === reviewId) {
-            const isCurrentlyLiked = review.likes.some(
-              (like) => like.userId === currentUserId
-            )
             let updatedLikes: ReviewLike[]
 
             if (isCurrentlyLiked) {
@@ -188,45 +193,9 @@ export function useReviews(openLibraryId: string | undefined) {
     )
 
     try {
-      const response = await apiClient.toggleLikeReview(reviewId)
-      await mutate(
-        (currentReviews) => {
-          return currentReviews?.map((review) => {
-            if (review.id === reviewId) {
-              let updatedLikes: ReviewLike[] = []
-              if (response.liked) {
-                if (
-                  !review.likes.some((like) => like.userId === currentUserId)
-                ) {
-                  updatedLikes = [
-                    ...review.likes,
-                    {
-                      userId: currentUserId,
-                      reviewId,
-                      createdAt: new Date().toISOString(),
-                    },
-                  ]
-                } else {
-                  updatedLikes = review.likes
-                }
-              } else {
-                updatedLikes = review.likes.filter(
-                  (like) => like.userId !== currentUserId
-                )
-              }
-              if (updatedLikes.length !== response.likesCount) {
-              }
-              return { ...review, likes: updatedLikes }
-            }
-            return review
-          })
-        },
-        {
-          populateCache: true,
-          revalidate: true,
-        }
-      )
-      return response
+      await apiClient.toggleLikeReview(reviewId)
+
+      await mutate(undefined, { revalidate: true })
     } catch (err) {
       console.error("Failed to toggle like:", err)
       await mutate() // revert optimistic update on error

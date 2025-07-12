@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card"
 import { type BookSearchResultDto, getCoverImageUrl } from "@/types/books"
 import { motion } from "motion/react"
+import { ReadingStatusBadge } from "@/components/reading-status/reading-status-badge"
 
 interface BookCardProps {
   book: BookSearchResultDto
@@ -57,6 +58,13 @@ export function BookCard({ book }: BookCardProps) {
                     Published: {book.firstPublishYear}
                   </p>
                 )}
+                <div className="mt-2">
+                  <ReadingStatusBadge
+                    openLibraryId={isbn || book.openLibraryKey || ""}
+                    className="text-xs"
+                    showIcon={false}
+                  />
+                </div>
               </div>
             </CardContent>
           </Link>
@@ -79,6 +87,13 @@ export function BookCard({ book }: BookCardProps) {
                   Published: {book.firstPublishYear}
                 </p>
               )}
+              <div className="mt-2">
+                <ReadingStatusBadge
+                  openLibraryId={isbn || book.openLibraryKey || ""}
+                  className="text-xs"
+                  showIcon={false}
+                />
+              </div>
             </div>
           </CardContent>
         )}

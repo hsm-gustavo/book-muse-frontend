@@ -21,6 +21,15 @@ interface User {
   updatedAt: string
 }
 
+interface UserProfile {
+  id: string
+  name: string
+  email: string
+  profilePicture?: string
+  createdAt: string
+  readCount: number
+}
+
 interface CreateUserRequest {
   name: string
   email: string
@@ -39,8 +48,23 @@ import type {
   Review,
   CreateReviewPayload,
   UpdateReviewPayload,
-  ToggleLikeResponse,
+  ReviewDetail,
+  UserReview,
 } from "@/types/reviews"
+
+import type {
+  ReadingStatusEntry,
+  CreateReadingStatusPayload,
+  ReadingStatusResponse,
+} from "@/types/reading-status"
+
+import type {
+  UserFollowInfo,
+  FollowCounts,
+  FollowResponse,
+} from "@/types/followers"
+
+import type { UserSearchResponse } from "@/types/user-search"
 
 class ApiClient {
   private baseUrl: string
@@ -151,6 +175,10 @@ class ApiClient {
     return this.request<User>("/users/me")
   }
 
+  async getUserById(userId: string): Promise<UserProfile> {
+    return this.request<UserProfile>(`/users/${userId}`)
+  }
+
   async updateProfile(data: UpdateUserRequest): Promise<User> {
     return this.request<User>("/users/me", {
       method: "PATCH",
@@ -178,6 +206,21 @@ class ApiClient {
     return this.request<{ url: string | null }>("/users/me/profile-picture")
   }
 
+  // User search endpoint
+  async searchUsers(
+    query: string,
+    limit = 20,
+    cursor?: string
+  ): Promise<UserSearchResponse> {
+    const params = new URLSearchParams({ q: query, limit: limit.toString() })
+    if (cursor) {
+      params.set("cursor", cursor)
+    }
+    return this.request<UserSearchResponse>(
+      `/users/search?${params.toString()}`
+    )
+  }
+
   // Book endpoints
   async searchBooks(q: string, page = 1): Promise<BookSearchResponse> {
     const params = new URLSearchParams({ q, page: page.toString() })
@@ -202,10 +245,24 @@ class ApiClient {
     return this.request<Review[]>(`/reviews/book/${openLibraryId}`)
   }
 
-  async toggleLikeReview(reviewId: string): Promise<ToggleLikeResponse> {
-    return this.request<ToggleLikeResponse>(`/reviews/${reviewId}/like`, {
-      method: "POST",
-    })
+  async getReviewById(reviewId: string): Promise<ReviewDetail> {
+    return this.request<ReviewDetail>(`/reviews/${reviewId}`)
+  }
+
+  async getUserReviews(userId: string): Promise<UserReview[]> {
+    return this.request<UserReview[]>(`/reviews/user/${userId}`)
+  }
+
+  async toggleLikeReview(reviewId: string): Promise<void> {
+    try {
+      await this.request(`/reviews/${reviewId}/like`, {
+        method: "DELETE",
+      })
+    } catch {
+      await this.request(`/reviews/${reviewId}/like`, {
+        method: "POST",
+      })
+    }
   }
 
   async updateReview(
@@ -219,15 +276,80 @@ class ApiClient {
   }
 
   async deleteReview(reviewId: string): Promise<void> {
-    await this.request(`/reviews/${reviewId}}`, {
+    await this.request(`/reviews/${reviewId}`, {
       method: "DELETE",
     })
+  }
+
+  // Reading Status endpoints
+  async createOrUpdateReadingStatus(
+    payload: CreateReadingStatusPayload
+  ): Promise<ReadingStatusResponse> {
+    return this.request<ReadingStatusResponse>("/reading-status", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    })
+  }
+
+  async getReadingStatus(
+    openLibraryId: string
+  ): Promise<ReadingStatusResponse | null> {
+    try {
+      return await this.request<ReadingStatusResponse>(
+        `/reading-status/${openLibraryId}`
+      )
+    } catch (error) {
+      // Return null if not found (404)
+      if (error instanceof Error && error.message.includes("404")) {
+        return null
+      }
+      throw error
+    }
+  }
+
+  async deleteReadingStatus(openLibraryId: string): Promise<void> {
+    await this.request(`/reading-status/${openLibraryId}`, {
+      method: "DELETE",
+    })
+  }
+
+  async getReadingStatusList(status?: string): Promise<ReadingStatusEntry[]> {
+    const params = status ? new URLSearchParams({ status }) : ""
+    return this.request<ReadingStatusEntry[]>(
+      `/reading-status${params ? `?${params}` : ""}`
+    )
+  }
+
+  // Follower endpoints
+  async followUser(userId: string): Promise<FollowResponse> {
+    return this.request<FollowResponse>(`/users/${userId}/follow`, {
+      method: "POST",
+    })
+  }
+
+  async unfollowUser(userId: string): Promise<FollowResponse> {
+    return this.request<FollowResponse>(`/users/${userId}/unfollow`, {
+      method: "DELETE",
+    })
+  }
+
+  async getFollowers(userId: string): Promise<UserFollowInfo[]> {
+    return this.request<UserFollowInfo[]>(`/users/${userId}/followers`)
+  }
+
+  async getFollowing(userId: string): Promise<UserFollowInfo[]> {
+    return this.request<UserFollowInfo[]>(`/users/${userId}/following`)
+  }
+
+  async getFollowCounts(userId: string): Promise<FollowCounts> {
+    return this.request<FollowCounts>(`/users/${userId}/follow-counts`)
   }
 }
 
 export const apiClient = new ApiClient()
 export type {
   User,
+  UserProfile,
   LoginRequest,
   LoginResponse,
   CreateUserRequest,

@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/card"
 import { type BookDetails, getCoverImageUrl } from "@/types/books"
 import { useAuth } from "@/lib/auth"
-import { Star } from "lucide-react"
 import { motion } from "motion/react"
-import { AnimatedButton } from "@/components/ui/animated-button"
+import { ReadingStatusSelector } from "@/components/reading-status/reading-status-selector"
+import { ReadingStatusBadge } from "@/components/reading-status/reading-status-badge"
 
 interface BookDetailsDisplayProps {
   book: BookDetails
@@ -58,15 +58,26 @@ export function BookDetailsDisplay({ book }: BookDetailsDisplayProps) {
           )}
           {book.authors &&
             book.authors.length > 0 && ( // authors is now string[]
-              <p className="text-md text-foreground/80 font-medium text-center">
+              <p className="text-md text-foreground/80 font-medium text-center mb-4">
                 by {book.authors.join(", ")}
               </p>
             )}
           {user && (
-            <AnimatedButton className="mt-6 w-full bg-gradient-to-r from-gradient-purple to-gradient-pink hover:opacity-90">
-              <Star className="mr-2 h-4 w-4" />
-              Write a review
-            </AnimatedButton>
+            <ReadingStatusSelector
+              openLibraryId={
+                book.workId || book.isbn13?.[0] || book.isbn10?.[0] || ""
+              }
+              className="w-full"
+            />
+          )}
+
+          {!user && (
+            <ReadingStatusBadge
+              openLibraryId={
+                book.workId || book.isbn13?.[0] || book.isbn10?.[0] || ""
+              }
+              className="w-full justify-center"
+            />
           )}
         </CardContent>
       </Card>

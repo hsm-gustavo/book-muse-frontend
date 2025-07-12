@@ -12,9 +12,9 @@ import { useReviews } from "@/hooks/use-reviews"
 import { useState } from "react"
 import { Review } from "@/types/reviews"
 import { ReviewList } from "@/components/reviews/review-list"
-import { ReviewForm } from "@/components/reviews/review-form"
 import { AnimatedButton } from "@/components/ui/animated-button"
 import { Pencil } from "lucide-react"
+import { ReviewFormServer } from "@/components/reviews/review-form-server"
 
 export default function BookDetailsPage() {
   const params = useParams()
@@ -43,6 +43,7 @@ export default function BookDetailsPage() {
   const handleReviewFormSuccess = () => {
     setEditingReview(null)
     setShowReviewForm(false)
+    window.location.reload()
   }
 
   const handleEditReview = (review: Review) => {
@@ -54,8 +55,6 @@ export default function BookDetailsPage() {
     setEditingReview(null)
     setShowReviewForm(false)
   }
-
-  console.log(reviews)
 
   return (
     <PageTransition>
@@ -110,7 +109,7 @@ export default function BookDetailsPage() {
                 )}
 
                 {(showReviewForm || editingReview) && user && openLibraryId && (
-                  <ReviewForm
+                  <ReviewFormServer
                     openLibraryId={openLibraryId}
                     existingReview={editingReview}
                     onSuccess={handleReviewFormSuccess}
