@@ -3,6 +3,7 @@
 import { motion, useInView } from "motion/react"
 import { Card } from "@/components/ui/card"
 import { useRef } from "react"
+import { cn } from "@/lib/utils"
 
 interface AnimatedCardProps {
   children: React.ReactNode
@@ -27,8 +28,9 @@ export function AnimatedCard({
       transition={{ duration: 0.5, delay }}
       whileHover={hover ? { y: -5, transition: { duration: 0.2 } } : undefined}
       ref={ref}
+      className="w-full mx-auto"
     >
-      <Card className={className}>{children}</Card>
+      <Card className={cn("w-full mx-auto", className)}>{children}</Card>
     </motion.div>
   )
 }

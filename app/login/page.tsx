@@ -1,6 +1,4 @@
-"use client"
-
-import SignupForm from "@/components/auth/signup"
+import LoginForm from "@/components/auth/login"
 import { AnimatedCard } from "@/components/ui/animated-card"
 import {
   CardContent,
@@ -11,7 +9,7 @@ import {
 import { BookOpen } from "lucide-react"
 import Link from "next/link"
 
-export default function SignupPage() {
+export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center gradient-pastel p-4">
       <AnimatedCard className="w-full max-w-md">
@@ -22,16 +20,16 @@ export default function SignupPage() {
             </div>
             <span className="text-xl font-bold text-gray-800">BookMuse</span>
           </div>
-          <CardTitle className="text-2xl">Create your account</CardTitle>
-          <CardDescription>Join the BookMuse community today</CardDescription>
+          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          <SignupForm />
+          <LoginForm />
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
-              Already have an account?{" "}
-              <Link href="/login" className="text-purple-600 hover:underline">
-                Sign in
+              Don't have an account?{" "}
+              <Link href="/signup" className="text-purple-600 hover:underline">
+                Sign up
               </Link>
             </p>
           </div>
