@@ -26,9 +26,9 @@ export async function middleware(req: NextRequest) {
     const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
       method: "POST",
       headers: {
-        Cookie: `${REFRESH_TOKEN_NAME}=${refresh}`,
+        Authorization: `Bearer ${access}`,
       },
-      credentials: "include",
+      body: JSON.stringify({ refreshToken: refresh }),
     })
 
     if (refreshResponse.ok) {

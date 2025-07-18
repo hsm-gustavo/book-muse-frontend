@@ -27,7 +27,5 @@ export async function GET(req: NextRequest) {
 
   const data = await res.json()
 
-  console.log(data)
-
   return NextResponse.json(data)
 }

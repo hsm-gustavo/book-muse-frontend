@@ -18,10 +18,8 @@ export default function ProfileContent({
   reviews,
   userProfile,
 }: ProfileContentProps) {
-  console.log("stat", bookStatuses)
-
   return (
-    <Tabs defaultValue="books" className="space-y-6">
+    <Tabs variant="motion" defaultValue="books" className="space-y-6">
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="books">My Books</TabsTrigger>
         <TabsTrigger value="reviews">Reviews</TabsTrigger>
