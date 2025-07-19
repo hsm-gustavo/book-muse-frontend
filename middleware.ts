@@ -26,6 +26,7 @@ export async function middleware(req: NextRequest) {
     const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${access}`,
       },
       body: JSON.stringify({ refreshToken: refresh }),

@@ -2,7 +2,6 @@
 
 import { ArrowRight, BookOpen, Sparkles } from "lucide-react"
 import { motion } from "motion/react"
-import { Button } from "@/components/ui/button"
 import { AnimatedButton } from "../ui/animated-button"
 
 export default function CTA() {

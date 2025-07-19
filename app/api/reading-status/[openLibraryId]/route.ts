@@ -1,20 +1,19 @@
 import { API_URL } from "@/lib/constants"
 import { cookies } from "next/headers"
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ openLibraryId: string }> }
+) {
+  const { openLibraryId } = await params
+
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
 
-  const searchParams = req.nextUrl.searchParams
-  const status = searchParams.get("status")
+  const url = `${API_URL}/reading-status/${openLibraryId}`
 
-  const url = new URL(`${API_URL}/reading-status`)
-  if (status) {
-    url.searchParams.set("status", status)
-  }
-
-  const res = await fetch(url.toString(), {
+  const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -30,24 +29,22 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(data)
 }
 
-export async function POST(req: NextRequest) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ openLibraryId: string }> }
+) {
+  const { openLibraryId } = await params
+
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
 
-  const { openLibraryId, status } = await req.json()
-
-  const url = `${API_URL}/reading-status`
+  const url = `${API_URL}/reading-status/${openLibraryId}`
 
   const res = await fetch(url, {
-    method: "POST",
+    method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({
-      openLibraryId,
-      status,
-    }),
   })
 
   if (!res.ok) {

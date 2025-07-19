@@ -2,10 +2,10 @@ import { Heart, Star } from "lucide-react"
 import { AnimatedCard } from "../ui/animated-card"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
 import { TabsContent } from "../ui/tabs"
-import { Review } from "@/lib/types/review"
+import { MyReview } from "@/lib/types/review"
 
 interface ReviewsTabProps {
-  reviews: Review[]
+  reviews: MyReview[]
 }
 
 export default function ReviewsTab({ reviews }: ReviewsTabProps) {

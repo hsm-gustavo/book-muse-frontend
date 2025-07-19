@@ -4,11 +4,11 @@ import { UserProfile } from "@/lib/types/user"
 import { AnimatedCard } from "../ui/animated-card"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { CardContent } from "../ui/card"
-import { Review } from "@/lib/types/review"
+import { MyReview } from "@/lib/types/review"
 
 interface ProfileHeaderProps {
   userProfile: UserProfile
-  reviews: Review[]
+  reviews: MyReview[]
 }
 
 export default function ProfileHeader({

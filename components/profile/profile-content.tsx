@@ -1,15 +1,15 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
 import BooksTab from "./books-tab"
 import ReviewsTab from "./reviews-tab"
 import FollowersTab from "./followers-tab"
 import FollowingTab from "./following-tab"
 import { BookStatus } from "@/lib/types/book"
-import { Review } from "@/lib/types/review"
+import { MyReview } from "@/lib/types/review"
 import { UserProfile } from "@/lib/types/user"
 
 interface ProfileContentProps {
   bookStatuses: BookStatus[]
-  reviews: Review[]
+  reviews: MyReview[]
   userProfile: UserProfile
 }
 

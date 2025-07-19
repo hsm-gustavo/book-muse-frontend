@@ -1,18 +1,5 @@
-import {
-  BookOpen,
-  Users,
-  Star,
-  TrendingUp,
-  MessageSquare,
-  Heart,
-} from "lucide-react"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card"
+import { BookOpen, Users, Star, MessageSquare, Heart } from "lucide-react"
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { AnimatedCard } from "../ui/animated-card"
 import { AnimatePresence } from "motion/react"
 

@@ -5,7 +5,7 @@ import ProfileContent from "@/components/profile/profile-content"
 import ProfileHeader from "@/components/profile/profile-header"
 import { fetchWithCreds } from "@/lib/api"
 import { BookStatus } from "@/lib/types/book"
-import { Review } from "@/lib/types/review"
+import { MyReview } from "@/lib/types/review"
 import { UserProfile } from "@/lib/types/user"
 import { useQuery } from "@tanstack/react-query"
 import { notFound } from "next/navigation"
@@ -18,9 +18,9 @@ export default function ProfileData() {
 
   const userId = user?.id
 
-  const { data: reviews, isLoading: rLoading } = useQuery<Review[]>({
-    queryKey: ["userReviews"],
-    queryFn: () => fetchWithCreds<Review[]>(`/api/reviews/${user?.id}`),
+  const { data: reviews, isLoading: rLoading } = useQuery<MyReview[]>({
+    queryKey: ["userReviews", userId],
+    queryFn: () => fetchWithCreds<MyReview[]>(`/api/reviews/user/${userId}`),
     enabled: !!userId,
   })
 
@@ -32,8 +32,10 @@ export default function ProfileData() {
 
   if (uLoading || rLoading || sLoading) {
     return (
-      <div className="min-h-screen gradient-pastel">
-        <LoadingDots />
+      <div className="min-h-screen gradient-pastel flex items-center justify-center">
+        <div className="pt-20 container mx-auto px-4 py-8">
+          <LoadingDots />
+        </div>
       </div>
     )
   }

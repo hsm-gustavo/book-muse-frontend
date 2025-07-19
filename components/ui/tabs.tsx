@@ -77,12 +77,9 @@ function Tabs({ value: activeValue, variant, className, ...props }: TabsProps) {
   )
 }
 
-interface TabsListProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {}
-
 const TabsList = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.List>,
-  TabsListProps
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => {
   const { setFocused, variant } = useTabsContext()
   const { tabsList } = tabsVariants({ variant })
@@ -98,9 +95,6 @@ const TabsList = React.forwardRef<
 })
 TabsList.displayName = "TabsList"
 
-interface TabsTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {}
-
 const transition: Transition = {
   type: "spring",
   duration: 0.3,
@@ -109,7 +103,7 @@ const transition: Transition = {
 
 const TabsTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Trigger>,
-  TabsTriggerProps
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
 >(({ className, children, value, ...props }, ref) => {
   const { focused, setFocused, activeValue, variant } = useTabsContext()
   const { tabsTrigger } = tabsVariants({ variant })

@@ -2,7 +2,7 @@ import { API_URL } from "@/lib/constants"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
-export async function GET(
+export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -14,6 +14,7 @@ export async function GET(
   const url = `${API_URL}/reviews/${id}`
 
   const res = await fetch(url, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -24,17 +25,16 @@ export async function GET(
     return NextResponse.json(error, { status: res.status })
   }
 
-  const data = await res.json()
-
-  return NextResponse.json(data)
+  return NextResponse.json(null, {
+    status: 204,
+  })
 }
 
-export async function PATCH(
+export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
-  const { title, description, rating } = await req.json()
 
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
@@ -42,12 +42,10 @@ export async function PATCH(
   const url = `${API_URL}/reviews/${id}`
 
   const res = await fetch(url, {
-    method: "PATCH",
+    method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({ title, description, rating }),
   })
 
   if (!res.ok) {
@@ -55,7 +53,7 @@ export async function PATCH(
     return NextResponse.json(error, { status: res.status })
   }
 
-  const data = await res.json()
-
-  return NextResponse.json(data)
+  return NextResponse.json(null, {
+    status: 204,
+  })
 }
