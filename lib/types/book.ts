@@ -54,7 +54,16 @@ export function getCoverImageUrl(
   size: "S" | "M" | "L" = "M"
 ): string {
   if (!coverId) {
-    return "/placeholder.svg?height=100&width=70" // Default placeholder
+    switch (size) {
+      case "S":
+        return `/api/placeholder/36/58?format=jpeg`
+      case "M":
+        return `/api/placeholder/180/286?format=jpeg`
+      case "L":
+        return `/api/placeholder/313/500?format=jpeg`
+      default:
+        return `/api/placeholder/180/286?format=jpeg`
+    }
   }
   return `https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg`
 }

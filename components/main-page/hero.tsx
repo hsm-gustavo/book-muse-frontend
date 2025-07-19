@@ -4,6 +4,7 @@ import { motion } from "motion/react"
 import { Badge } from "../ui/badge"
 import { BookOpen, Sparkles } from "lucide-react"
 import { AnimatedButton } from "../ui/animated-button"
+import Link from "next/link"
 
 export default function Hero() {
   return (
@@ -69,20 +70,24 @@ export default function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in-up"
             style={{ animationDelay: "0.4s" }}
           >
-            <AnimatedButton
-              size="lg"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 text-lg"
-            >
-              <BookOpen className="h-5 w-5 mr-2" />
-              Start Reading
-            </AnimatedButton>
-            <AnimatedButton
-              size="lg"
-              variant="outline"
-              className="bg-white/80 backdrop-blur-sm border-purple-200 text-purple-600 hover:bg-purple-50 px-8 py-3 text-lg"
-            >
-              Browse Reviews
-            </AnimatedButton>
+            <Link href={"/search"}>
+              <AnimatedButton
+                size="lg"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 text-lg"
+              >
+                <BookOpen className="h-5 w-5 mr-2" />
+                Start Reading
+              </AnimatedButton>
+            </Link>
+            <Link href={"/users"}>
+              <AnimatedButton
+                size="lg"
+                variant="outline"
+                className="bg-white/80 backdrop-blur-sm border-purple-200 text-purple-600 hover:bg-purple-50 px-8 py-3 text-lg"
+              >
+                Browse Users
+              </AnimatedButton>
+            </Link>
           </div>
         </div>
       </div>

@@ -74,7 +74,10 @@ export default function Books({ results, query }: BooksProps) {
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                          <h3
+                            className="font-semibold text-lg mb-2 line-clamp-2 min-h-14"
+                            title={book.title}
+                          >
                             {isbn ? (
                               <Link
                                 href={`/books/${isbn}`}
@@ -88,12 +91,18 @@ export default function Books({ results, query }: BooksProps) {
                           </h3>
 
                           {book.authorNames && book.authorNames.length > 0 && (
-                            <p className="text-muted-foreground mb-2">
+                            <p
+                              className="text-muted-foreground mb-2 truncate"
+                              title={`by ${book.authorNames.join(", ")}`}
+                            >
                               by {book.authorNames.join(", ")}
                             </p>
                           )}
 
-                          <div className="flex flex-wrap gap-2 mb-3">
+                          <div
+                            className="flex flex-wrap gap-2 mb-3"
+                            title={"First Publish Year"}
+                          >
                             {book.firstPublishYear && (
                               <Badge variant="secondary">
                                 {book.firstPublishYear}

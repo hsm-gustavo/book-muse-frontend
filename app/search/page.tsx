@@ -3,6 +3,12 @@ import Search from "./search"
 import Books from "./books"
 import { API_URL } from "@/lib/constants"
 
+async function getBooksSearch(url: string): Promise<BookSearchResponse> {
+  const response = await fetch(url)
+
+  return await response.json()
+}
+
 export default async function SearchPage(props: {
   searchParams: Promise<{ q: string; page: string }>
 }) {
@@ -15,8 +21,7 @@ export default async function SearchPage(props: {
   const page = searchParams.page || "1"
   url.searchParams.set("page", page)
 
-  const searchResponse = await fetch(url.toString())
-  const searchResult: BookSearchResponse = await searchResponse.json()
+  const searchResponse = await getBooksSearch(url.toString())
 
   return (
     <div className="min-h-screen gradient-pastel">
@@ -30,7 +35,7 @@ export default async function SearchPage(props: {
           </div>
 
           <Search />
-          <Books query={searchParams.q} results={searchResult} />
+          <Books query={searchParams.q} results={searchResponse} />
         </div>
       </main>
     </div>

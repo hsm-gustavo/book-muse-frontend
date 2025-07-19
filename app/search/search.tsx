@@ -12,7 +12,7 @@ export default function Search() {
           <Input
             type="text"
             placeholder="Search for books, authors, or topics..."
-            className="pl-10"
+            className="pl-10 border-accent-pink focus-visible:border-accent-pink focus-visible:ring-accent-pink/50 selection:bg-accent-pink"
             name="q"
           />
         </div>
