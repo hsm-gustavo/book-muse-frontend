@@ -3,7 +3,7 @@
 import LoadingDots from "@/components/loading-dots"
 import ProfileContent from "@/components/profile/profile-content"
 import ProfileHeader from "@/components/profile/profile-header"
-import { fetchWithCreds } from "@/lib/api"
+import { fetcher } from "@/lib/api"
 import { BookStatus } from "@/lib/types/book"
 import { MyReview } from "@/lib/types/review"
 import { UserProfile } from "@/lib/types/user"
@@ -13,20 +13,20 @@ import { notFound } from "next/navigation"
 export default function ProfileData() {
   const { data: user, isLoading: uLoading } = useQuery<UserProfile>({
     queryKey: ["userProfile"],
-    queryFn: () => fetchWithCreds<UserProfile>("/api/users"),
+    queryFn: () => fetcher<UserProfile>("/api/users"),
   })
 
   const userId = user?.id
 
   const { data: reviews, isLoading: rLoading } = useQuery<MyReview[]>({
     queryKey: ["userReviews", userId],
-    queryFn: () => fetchWithCreds<MyReview[]>(`/api/reviews/user/${userId}`),
+    queryFn: () => fetcher<MyReview[]>(`/api/reviews/user/${userId}`),
     enabled: !!userId,
   })
 
   const { data: statuses, isLoading: sLoading } = useQuery<BookStatus[]>({
     queryKey: ["bookStatus"],
-    queryFn: () => fetchWithCreds<BookStatus[]>("/api/reading-status"),
+    queryFn: () => fetcher<BookStatus[]>("/api/reading-status"),
     enabled: !!userId,
   })
 

@@ -11,7 +11,7 @@ export async function POST(
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
 
-  const url = `${API_URL}/reviews/${id}`
+  const url = `${API_URL}/reviews/${id}/like`
 
   const res = await fetch(url, {
     method: "POST",
@@ -19,13 +19,14 @@ export async function POST(
       Authorization: `Bearer ${accessToken}`,
     },
   })
+  console.log(res)
 
   if (!res.ok) {
     const error = await res.text()
     return NextResponse.json(error, { status: res.status })
   }
 
-  return NextResponse.json(null, {
+  return new NextResponse(null, {
     status: 204,
   })
 }
@@ -39,7 +40,7 @@ export async function DELETE(
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
 
-  const url = `${API_URL}/reviews/${id}`
+  const url = `${API_URL}/reviews/${id}/like`
 
   const res = await fetch(url, {
     method: "DELETE",
@@ -53,7 +54,7 @@ export async function DELETE(
     return NextResponse.json(error, { status: res.status })
   }
 
-  return NextResponse.json(null, {
+  return new NextResponse(null, {
     status: 204,
   })
 }

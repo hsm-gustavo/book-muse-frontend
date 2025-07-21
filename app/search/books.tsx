@@ -80,7 +80,7 @@ export default function Books({ results, query }: BooksProps) {
                           >
                             {isbn ? (
                               <Link
-                                href={`/books/${isbn}`}
+                                href={`/book/${isbn}`}
                                 className="hover:text-primary transition-colors"
                               >
                                 {book.title}
@@ -116,7 +116,7 @@ export default function Books({ results, query }: BooksProps) {
                           </div>
 
                           {isbn ? (
-                            <Link href={`/books/${isbn}`}>
+                            <Link href={`/book/${isbn}`}>
                               <AnimatedButton size="sm" className="w-full">
                                 <BookOpen className="h-4 w-4 mr-2" />
                                 View Details
