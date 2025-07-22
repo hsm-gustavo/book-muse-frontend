@@ -19,7 +19,6 @@ export async function POST(
       Authorization: `Bearer ${accessToken}`,
     },
   })
-  console.log(res)
 
   if (!res.ok) {
     const error = await res.text()

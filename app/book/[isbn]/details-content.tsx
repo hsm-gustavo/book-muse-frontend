@@ -6,23 +6,27 @@ import { Review } from "@/lib/types/review"
 interface DetailsContentProps {
   book: BookDetails
   description: string
-  reviews: Review[]
   userId?: string
   isLogged: boolean
+  openLibraryId: string
 }
 
 export default function DetailsContent({
   book,
   description,
-  reviews,
   userId,
   isLogged,
+  openLibraryId,
 }: DetailsContentProps) {
   console.log("DetailsContent is rendering")
   return (
     <div className="lg:col-span-2 space-y-6">
       <DetailsContainer book={book} description={description} />
-      <ReviewsContainer userId={userId} isLogged={isLogged} reviews={reviews} />
+      <ReviewsContainer
+        userId={userId}
+        isLogged={isLogged}
+        openLibraryId={openLibraryId}
+      />
     </div>
   )
 }

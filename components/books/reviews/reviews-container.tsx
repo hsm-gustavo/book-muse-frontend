@@ -3,15 +3,19 @@
 import { AnimatedButton } from "@/components/ui/animated-button"
 import { AnimatedCard } from "@/components/ui/animated-card"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Review } from "@/lib/types/review"
+import { BookReviews, Review } from "@/lib/types/review"
 import { Heart, Star } from "lucide-react"
-import { useEffect, useState, useTransition } from "react"
-import { toggleReviewLike } from "./action"
+import { useEffect, useState } from "react"
+import { useInView } from "react-intersection-observer"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { fetchReviewsByBook } from "@/lib/api"
+import LoadingDots from "@/components/loading-dots"
+import { useToggleReviewLike } from "@/lib/hooks/use-toggle-review-like"
 
 interface ReviewsContainerProps {
-  reviews: Review[]
   isLogged: boolean
   userId?: string
+  openLibraryId: string
 }
 
 interface ReviewComponentProps {
@@ -24,7 +28,6 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
   const [reviewDate, setReviewDate] = useState(
     new Date(review.createdAt).toDateString()
   )
-  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
     setReviewDate(new Date(review.createdAt).toLocaleDateString())
@@ -32,17 +35,15 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
 
   const isLiked = review.likes.some((like) => like.userId === userId)
 
+  const { mutate: toggleLike, isPending } = useToggleReviewLike(
+    review.openLibraryId,
+    userId
+  )
+
   const handleClick = () => {
-    startTransition(async () => {
-      try {
-        await toggleReviewLike({
-          reviewId: review.id,
-          isLiked,
-          openLibraryId: review.openLibraryId,
-        })
-      } catch (error) {
-        console.error(error)
-      }
+    toggleLike({
+      reviewId: review.id,
+      isLiked,
     })
   }
 
@@ -93,10 +94,35 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
 }
 
 export default function ReviewsContainer({
-  reviews,
   isLogged,
   userId,
+  openLibraryId,
 }: ReviewsContainerProps) {
+  const { ref, inView } = useInView()
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfiniteQuery<BookReviews>({
+    queryKey: ["reviews", openLibraryId],
+    queryFn: ({ pageParam }) =>
+      fetchReviewsByBook(openLibraryId, pageParam as string),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialPageParam: undefined,
+  })
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
+
+  const reviews = data?.pages.flatMap((page) => page.data) ?? []
+
   return (
     <AnimatedCard>
       <CardHeader>
@@ -106,7 +132,11 @@ export default function ReviewsContainer({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {reviews.length > 0 ? (
+        {isLoading ? (
+          <LoadingDots className="w-2 h-2" />
+        ) : error ? (
+          <p className="text-red-500">Failed to load reviews</p>
+        ) : reviews.length > 0 ? (
           <div className="space-y-6">
             {reviews.map((review) => (
               <ReviewComponent
@@ -116,6 +146,8 @@ export default function ReviewsContainer({
                 key={review.id}
               />
             ))}
+            <div ref={ref} className="h-10" />
+            {isFetchingNextPage && <LoadingDots className="w-2 h-2" />}
           </div>
         ) : (
           <div className="text-center py-8">

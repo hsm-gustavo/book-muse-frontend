@@ -23,7 +23,7 @@ export default function ReviewDialog({ openLibraryId }: ReviewDialogProps) {
   return (
     <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
       <DialogTrigger asChild>
-        <AnimatedButton className="w-full">
+        <AnimatedButton className="w-56">
           <Edit3 className="h-4 w-4 mr-2" />
           Write Review
         </AnimatedButton>

@@ -1,13 +1,11 @@
 "use server"
 
 import { API_URL } from "@/lib/constants"
-import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 export async function toggleReviewLike({
   reviewId,
   isLiked,
-  openLibraryId,
 }: {
   reviewId: string
   isLiked: boolean
@@ -29,6 +27,4 @@ export async function toggleReviewLike({
     const error = await res.text()
     throw new Error(error)
   }
-
-  revalidateTag(`bookReviews${openLibraryId}`)
 }

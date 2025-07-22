@@ -23,8 +23,6 @@ export interface ReviewUser {
 
 export interface ReviewLike {
   userId: string
-  reviewId: string
-  createdAt: string
 }
 
 export interface Review {
@@ -33,9 +31,15 @@ export interface Review {
   description: string
   rating: number // 0-5
   openLibraryId: string
+  createdAt: string
+  updatedAt: string
   userId: string
   user: ReviewUser
   likes: ReviewLike[]
-  createdAt: string
-  updatedAt: string
+}
+
+export interface BookReviews {
+  data: Review[]
+  nextCursor?: string
+  hasNextPage: true
 }
