@@ -150,22 +150,22 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  --pastel-pink: oklch(0.6 0.03 355.85);
-  --pastel-blue: oklch(0.62 0.022 229.19);
-  --pastel-purple: oklch(0.59 0.036 314.55);
-  --pastel-green: oklch(0.64 0.045 145.1);
-  --pastel-yellow: oklch(0.66 0.035 107.2);
-  --pastel-orange: oklch(0.63 0.026 67.46);
+  --pastel-pink: oklch(0.2398 0.0464 165.91);
+  --pastel-blue: oklch(0.2006 0.0451 49.53);
+  --pastel-purple: oklch(0.3942 0.1018 136.98);
+  --pastel-green: oklch(0.3232 0.121 327.93);
+  --pastel-yellow: oklch(0.2423 0.1092 274.59);
+  --pastel-orange: oklch(0.3147 0.0668 250.78);
 
-  --accent-pink: oklch(0.52 0.055 357.16);
-  --accent-blue: oklch(0.56 0.038 229.72);
-  --accent-purple: oklch(0.51 0.065 314.25);
-  --accent-green: oklch(0.58 0.07 144.63);
-  --accent-yellow: oklch(0.61 0.06 107.85);
-  --accent-orange: oklch(0.57 0.038 67.02);
+  --accent-pink: oklch(0.3936 0.0718 166.05);
+  --accent-blue: oklch(0.3313 0.069 46.31);
+  --accent-purple: oklch(0.3942 0.1018 136.98);
+  --accent-green: oklch(0.45 0.06 144.63);
+  --accent-yellow: oklch(0.2423 0.1092 274.59);
+  --accent-orange: oklch(0.3147 0.0668 250.78);
 
-  --gradient-purple: oklch(0.47 0.13 312.73);
-  --gradient-pink: oklch(0.49 0.11 352.2);
+  --gradient-purple: oklch(0.5998 0.1906 139.38);
+  --gradient-pink: oklch(0.5979 0.1584 151.68);
 }
 
 @layer base {

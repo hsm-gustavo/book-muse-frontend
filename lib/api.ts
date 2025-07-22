@@ -1,4 +1,5 @@
 import { BookReviews } from "./types/review"
+import { UserSearchResponse } from "./types/user"
 
 export async function fetcher<T>(
   url: string,
@@ -54,4 +55,21 @@ export async function toggleReviewLike({
   await fetcher(`/api/reviews/${reviewId}/like`, {
     method,
   })
+}
+
+export async function searchUsers(
+  query: string,
+  pageParam?: string
+): Promise<UserSearchResponse> {
+  const q = query
+  const params = new URLSearchParams()
+  if (q) params.set("q", q)
+  if (pageParam) params.set("cursor", pageParam)
+  params.set("limit", "10")
+
+  const res = await fetcher<UserSearchResponse>(
+    `/api/users/search?${params.toString()}`
+  )
+
+  return res
 }
