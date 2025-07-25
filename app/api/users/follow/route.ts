@@ -2,38 +2,17 @@ import { API_URL } from "@/lib/constants"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
 
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  }
+  const { userId } = await req.json()
 
-  const res = await fetch(`${API_URL}/users/me`, { headers })
-
-  if (!res.ok) {
-    const error = await res.text()
-    return NextResponse.json({ error }, { status: res.status })
-  }
-
-  const data = await res.json()
-
-  return NextResponse.json(data)
-}
-
-export async function PATCH(req: Request) {
-  const cookieStore = await cookies()
-  const accessToken = cookieStore.get("accessToken")?.value
-
-  const reqData = await req.json()
-
-  const res = await fetch(`${API_URL}/users/me`, {
-    method: "PATCH",
+  const res = await fetch(`${API_URL}/users/${userId}/follow`, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify(reqData),
   })
 
   if (!res.ok) {
@@ -41,16 +20,16 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error }, { status: res.status })
   }
 
-  const data = await res.json()
-
-  return NextResponse.json(data)
+  return new NextResponse(null, { status: 204 })
 }
 
 export async function DELETE(req: Request) {
   const cookieStore = await cookies()
   const accessToken = cookieStore.get("accessToken")?.value
 
-  const res = await fetch(`${API_URL}/users/me`, {
+  const { userId } = await req.json()
+
+  const res = await fetch(`${API_URL}/users/${userId}/unfollow`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${accessToken}`,

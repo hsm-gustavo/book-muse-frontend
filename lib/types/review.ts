@@ -43,3 +43,11 @@ export interface BookReviews {
   nextCursor?: string
   hasNextPage: true
 }
+
+export interface GenericReview {
+  id: string
+  title: string
+  rating: number
+  description: string
+  createdAt: string
+}

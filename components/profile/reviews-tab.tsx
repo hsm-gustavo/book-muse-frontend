@@ -1,11 +1,10 @@
-import { Heart, Star } from "lucide-react"
+import { Star } from "lucide-react"
 import { AnimatedCard } from "../ui/animated-card"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
-import { TabsContent } from "../ui/tabs"
-import { MyReview } from "@/lib/types/review"
+import { GenericReview } from "@/lib/types/review"
 
 interface ReviewsTabProps {
-  reviews: MyReview[]
+  reviews: GenericReview[]
 }
 
 export default function ReviewsTab({ reviews }: ReviewsTabProps) {
@@ -21,7 +20,7 @@ export default function ReviewsTab({ reviews }: ReviewsTabProps) {
   }
 
   return (
-    <TabsContent value="reviews" className="space-y-4">
+    <div className="space-y-4">
       {reviews.map((review) => (
         <AnimatedCard key={review.id}>
           <CardHeader>
@@ -35,16 +34,6 @@ export default function ReviewsTab({ reviews }: ReviewsTabProps) {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Heart
-                  className={`h-4 w-4 ${
-                    review.likedByMe
-                      ? "fill-red-500 text-red-500"
-                      : "text-gray-400"
-                  }`}
-                />
-                <span className="text-sm">{review.likeCount}</span>
-              </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -52,6 +41,6 @@ export default function ReviewsTab({ reviews }: ReviewsTabProps) {
           </CardContent>
         </AnimatedCard>
       ))}
-    </TabsContent>
+    </div>
   )
 }
