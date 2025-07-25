@@ -2,6 +2,7 @@ import { Star } from "lucide-react"
 import { AnimatedCard } from "../ui/animated-card"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
 import { GenericReview } from "@/lib/types/review"
+import { formatDate } from "@/lib/utils"
 
 interface ReviewsTabProps {
   reviews: GenericReview[]
@@ -30,7 +31,7 @@ export default function ReviewsTab({ reviews }: ReviewsTabProps) {
                 <div className="flex items-center gap-2 mt-2">
                   <div className="flex">{renderStars(review.rating)}</div>
                   <span className="text-sm text-gray-500">
-                    {new Date(review.createdAt).toLocaleDateString()}
+                    {formatDate(review.createdAt)}
                   </span>
                 </div>
               </div>

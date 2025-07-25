@@ -5,12 +5,13 @@ import { AnimatedCard } from "@/components/ui/animated-card"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookReviews, Review } from "@/lib/types/review"
 import { Heart, Star } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { fetchReviewsByBook } from "@/lib/api"
 import LoadingDots from "@/components/loading-dots"
 import { useToggleReviewLike } from "@/lib/hooks/use-toggle-review-like"
+import { formatDate } from "@/lib/utils"
 
 interface ReviewsContainerProps {
   isLogged: boolean
@@ -25,14 +26,6 @@ interface ReviewComponentProps {
 }
 
 function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
-  const [reviewDate, setReviewDate] = useState(
-    new Date(review.createdAt).toDateString()
-  )
-
-  useEffect(() => {
-    setReviewDate(new Date(review.createdAt).toLocaleDateString())
-  }, [review.createdAt])
-
   const isLiked = review.likes.some((like) => like.userId === userId)
 
   const { mutate: toggleLike, isPending } = useToggleReviewLike(
@@ -88,7 +81,9 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
         )}
       </div>
       <p className="text-muted-foreground">{review.description}</p>
-      <p className="text-xs text-muted-foreground mt-2">{reviewDate}</p>
+      <p className="text-xs text-muted-foreground mt-2">
+        {formatDate(review.createdAt)}
+      </p>
     </div>
   )
 }

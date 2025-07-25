@@ -2,9 +2,9 @@ import { AnimatedCard } from "@/components/ui/animated-card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CardContent } from "@/components/ui/card"
 import { UserSearchResult } from "@/lib/types/user"
+import { formatDate } from "@/lib/utils"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 
 const getInitials = (name: string) => {
   return name
@@ -20,14 +20,6 @@ interface UserComponentProps {
 }
 
 export default function UserComponent({ user }: UserComponentProps) {
-  const [joinedDate, setJoinedDate] = useState(
-    new Date(user.createdAt).toDateString()
-  )
-
-  useEffect(() => {
-    setJoinedDate(new Date(user.createdAt).toLocaleDateString())
-  }, [user.createdAt])
-
   return (
     <Link href={`/users/${user.id}`}>
       <AnimatedCard className="transition-all hover:shadow-lg hover:scale-[1.02]">
@@ -43,7 +35,7 @@ export default function UserComponent({ user }: UserComponentProps) {
               <div className="flex items-center gap-2 mt-1">
                 <Calendar className="h-3 w-3 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground">
-                  Joined {joinedDate}
+                  Joined {formatDate(user.createdAt)}
                 </span>
               </div>
             </div>
