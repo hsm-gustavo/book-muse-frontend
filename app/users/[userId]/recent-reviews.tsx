@@ -52,7 +52,7 @@ export default function RecentReviews({ user }: { user: FullProfile }) {
             <MessageCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No reviews yet</h3>
             <p className="text-muted-foreground">
-              {user.name} hasn't written any reviews yet.
+              {user.name} hasn&apos;t written any reviews yet.
             </p>
           </div>
         )}

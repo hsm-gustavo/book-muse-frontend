@@ -9,9 +9,7 @@ import {
   useRef,
   useState,
 } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { ProfileFormData, profileSchema } from "@/app/me/_lib/definitions"
+import { profileSchema } from "@/app/me/_lib/definitions"
 import { z } from "zod"
 import { toast } from "sonner"
 import { useDropzone } from "react-dropzone"
@@ -33,10 +31,6 @@ export default function AvatarUpload({ userProfile }: AvatarUploadProps) {
 
   const [state, action, isPending] = useActionState(updateProfilePicture, null)
 
-  const form = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
-  })
-
   useEffect(() => {
     if (state?.success) {
       if (previewUrl && previewFile) {
@@ -51,7 +45,7 @@ export default function AvatarUpload({ userProfile }: AvatarUploadProps) {
     } else if (state?.errors?.file) {
       state.errors.file.forEach((err) => toast.error(err))
     }
-  }, [state])
+  }, [state, previewFile, previewUrl])
 
   async function onDrop(acceptedFiles: File[]) {
     const file = acceptedFiles[0]

@@ -24,7 +24,8 @@ export default function UserData({
               <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">User not found</h3>
               <p className="text-muted-foreground mb-4">
-                The user you're looking for doesn't exist or couldn't be loaded.
+                The user you&apos;re looking for doesn&apos;t exist or
+                couldn&apos;t be loaded.
               </p>
               <Link href="/search/users">
                 <AnimatedButton>

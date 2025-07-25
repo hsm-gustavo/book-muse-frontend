@@ -1,8 +1,6 @@
 import { cookies } from "next/headers"
 import { API_URL } from "@/lib/constants"
 import { FullProfile } from "@/lib/types/user"
-import { getCurrentUser } from "@/lib/user"
-import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import UserData from "./user-data"

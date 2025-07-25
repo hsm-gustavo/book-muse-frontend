@@ -1,5 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { fetcher, toggleReviewLike } from "../api"
+import {
+  type InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query"
+import { toggleReviewLike } from "../api"
+import { BookReviews } from "../types/review"
 
 export function useToggleReviewLike(openLibraryId: string, userId?: string) {
   const queryClient = useQueryClient()
@@ -19,23 +24,26 @@ export function useToggleReviewLike(openLibraryId: string, userId?: string) {
 
       const previousData = queryClient.getQueryData(["reviews", openLibraryId])
 
-      queryClient.setQueryData(["reviews", openLibraryId], (oldData: any) => {
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: any) => ({
-            ...page,
-            data: page.data.map((review: any) => {
-              if (review.id === reviewId) {
-                const likes = isLiked
-                  ? review.likes.filter((l: any) => l.userId !== userId)
-                  : [...review.likes, { userId: userId }]
-                return { ...review, likes }
-              }
-              return review
-            }),
-          })),
+      queryClient.setQueryData(
+        ["reviews", openLibraryId],
+        (oldData: InfiniteData<BookReviews, unknown>) => {
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page) => ({
+              ...page,
+              data: page.data.map((review) => {
+                if (review.id === reviewId) {
+                  const likes = isLiked
+                    ? review.likes.filter((l) => l.userId !== userId)
+                    : [...review.likes, { userId: userId }]
+                  return { ...review, likes }
+                }
+                return review
+              }),
+            })),
+          }
         }
-      })
+      )
 
       return { previousData }
     },

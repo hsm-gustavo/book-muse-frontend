@@ -16,20 +16,6 @@ async function getBookDetails(isbn: string): Promise<BookDetails> {
   return await response.json()
 }
 
-/* async function getReadingStatus(
-  openLibraryId?: string
-): Promise<ReadingStatusResponse | null> {
-  const token = (await cookies()).get("accessToken")?.value
-  if (!openLibraryId) return null
-  const response = await fetch(`${API_URL}/reading-status/${openLibraryId}`, {
-    next: { tags: [`readingStatus-${openLibraryId}`] },
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-  return await response.json()
-} */
-
 export default async function BookByIsbn({
   params,
 }: {

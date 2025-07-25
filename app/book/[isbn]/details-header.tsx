@@ -4,11 +4,7 @@ import { AnimatedCard } from "@/components/ui/animated-card"
 import { CardContent } from "@/components/ui/card"
 import { BookDetails, getCoverImageUrl } from "@/lib/types/book"
 import Image from "next/image"
-import {
-  ReadingStatus,
-  ReadingStatusResponse,
-} from "@/lib/types/reading-status"
-import { Badge } from "@/components/ui/badge"
+import { ReadingStatusResponse } from "@/lib/types/reading-status"
 import ReviewDialog from "@/components/books/reviews/review-dialog"
 import { useQuery } from "@tanstack/react-query"
 import { fetcher } from "@/lib/api"
@@ -29,21 +25,6 @@ export default function DetailsHeader({
   userId,
 }: DetailsHeaderProps) {
   const cover = book.coverUrl || getCoverImageUrl(book.covers?.[0], "L")
-
-  const getStatusLabel = (status: ReadingStatus) => {
-    switch (status) {
-      case "reading":
-        return "Currently Reading"
-      case "read":
-        return "Read"
-      case "want_to_read":
-        return "Want to Read"
-      case "abandoned":
-        return "Abandoned"
-      default:
-        return status
-    }
-  }
 
   const { data, isLoading, error } = useQuery<ReadingStatusResponse>({
     queryKey: ["status", openLibraryId, userId],

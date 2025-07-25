@@ -1,7 +1,6 @@
 import DetailsContainer from "@/components/books/details-container"
 import ReviewsContainer from "@/components/books/reviews/reviews-container"
 import { BookDetails } from "@/lib/types/book"
-import { Review } from "@/lib/types/review"
 
 interface DetailsContentProps {
   book: BookDetails

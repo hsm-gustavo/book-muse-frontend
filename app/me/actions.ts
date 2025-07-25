@@ -25,7 +25,7 @@ type PictureFormState =
   | null
 
 export async function updateProfilePicture(
-  state: PictureFormState,
+  prevState: PictureFormState,
   formData: FormData
 ) {
   const file = formData.get("file") as File
@@ -83,7 +83,7 @@ type UserNameFormState =
   | undefined
 
 export async function updateUserName(
-  state: UserNameFormState,
+  prevState: UserNameFormState,
   formData: FormData
 ) {
   try {
@@ -144,7 +144,7 @@ type LogoutFormState =
     }
   | undefined
 
-export async function logout(state: LogoutFormState, formData: FormData) {
+export async function logout(prevState: LogoutFormState, formData: FormData) {
   const cookieStore = await cookies()
   const refreshToken = cookieStore.get("refreshToken")?.value
   const accessToken = cookieStore.get("accessToken")?.value
@@ -196,7 +196,7 @@ type DeleteAccountFormState =
   | undefined
 
 export async function deleteUserAccount(
-  state: DeleteAccountFormState,
+  prevState: DeleteAccountFormState,
   formData: FormData
 ) {
   const cookieStore = await cookies()

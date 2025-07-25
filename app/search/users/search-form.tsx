@@ -2,15 +2,13 @@
 
 import LoadingDots from "@/components/loading-dots"
 import { AnimatedCard } from "@/components/ui/animated-card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { searchUsers } from "@/lib/api"
 import { UserSearchResponse } from "@/lib/types/user"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { Calendar, SearchIcon, Users } from "lucide-react"
-import Link from "next/link"
+import { SearchIcon, Users } from "lucide-react"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useInView } from "react-intersection-observer"
@@ -25,20 +23,14 @@ export default function SearchForm() {
   const query = watch("q")
   const [debouncedQuery] = useDebounce(query, 300)
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    error,
-  } = useInfiniteQuery<UserSearchResponse>({
-    queryKey: ["users", debouncedQuery],
-    queryFn: ({ pageParam }) =>
-      searchUsers(debouncedQuery, pageParam as string | undefined),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    initialPageParam: undefined,
-  })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery<UserSearchResponse>({
+      queryKey: ["users", debouncedQuery],
+      queryFn: ({ pageParam }) =>
+        searchUsers(debouncedQuery, pageParam as string | undefined),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialPageParam: undefined,
+    })
 
   const { ref, inView } = useInView()
 

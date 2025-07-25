@@ -3,7 +3,6 @@
 import { FullProfile } from "@/lib/types/user"
 import { AnimatedCard } from "../ui/animated-card"
 import { CardContent } from "../ui/card"
-import { MyReview } from "@/lib/types/review"
 import AvatarUpload from "./avatar-upload"
 import NameEditor from "./name-editor"
 import AccountActions from "./account-actions"
