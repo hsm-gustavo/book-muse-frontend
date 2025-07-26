@@ -1,5 +1,6 @@
-import { BookReviews } from "./types/review"
+import { BookReviews, EditReview, UserReviews } from "./types/review"
 import { UserSearchResponse } from "./types/user"
+import { z } from "zod"
 
 export async function fetcher<T>(
   url: string,
@@ -70,6 +71,65 @@ export async function searchUsers(
   const res = await fetcher<UserSearchResponse>(
     `/api/users/search?${params.toString()}`
   )
+
+  return res
+}
+
+export async function fetchReviewsByUser(
+  userId: string,
+  cursor?: string,
+  limit: number = 10
+): Promise<UserReviews> {
+  const params = new URLSearchParams()
+  if (cursor) params.set("cursor", cursor)
+  if (limit) params.set("limit", limit.toString())
+
+  const res = await fetcher<UserReviews>(
+    `/api/reviews/user/${userId}?${params.toString()}`
+  )
+
+  return res
+}
+
+export async function editReview({
+  reviewId,
+  payload,
+}: {
+  reviewId: string
+  payload: EditReview
+}) {
+  await fetcher(`/api/reviews/${reviewId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deleteReview({ reviewId }: { reviewId: string }) {
+  await fetcher(`/api/reviews/${reviewId}`, {
+    method: "DELETE",
+  })
+}
+
+export const CreateReviewFormSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  rating: z.number().gte(0).lte(5), //greater than or equals to 0, less than or equals to 5
+  openLibraryId: z.string(),
+})
+
+export type CreateReviewForm = z.infer<typeof CreateReviewFormSchema>
+
+export async function createReview(payload: CreateReviewForm) {
+  const res = await fetcher("/api/reviews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
 
   return res
 }

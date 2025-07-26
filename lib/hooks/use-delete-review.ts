@@ -1,23 +1,19 @@
 import {
-  type InfiniteData,
+  InfiniteData,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query"
-import { toggleReviewLike } from "../api"
 import { BookReviews, UserReviews } from "../types/review"
+import { deleteReview } from "../api"
 
-export function useToggleReviewLike(openLibraryId: string, userId?: string) {
+export function useDeleteReview(openLibraryId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({
-      reviewId,
-      isLiked,
-    }: {
-      reviewId: string
-      isLiked: boolean
-    }) => toggleReviewLike({ reviewId, isLiked }),
-    onMutate: async ({ reviewId, isLiked }) => {
+    mutationFn: ({ reviewId }: { reviewId: string }) =>
+      deleteReview({ reviewId }),
+
+    onMutate: async ({ reviewId }) => {
       await queryClient.cancelQueries({
         queryKey: ["reviews", openLibraryId],
       })
@@ -31,15 +27,7 @@ export function useToggleReviewLike(openLibraryId: string, userId?: string) {
             ...oldData,
             pages: oldData.pages.map((page) => ({
               ...page,
-              data: page.data.map((review) => {
-                if (review.id === reviewId) {
-                  const likes = isLiked
-                    ? review.likes.filter((l) => l.userId !== userId)
-                    : [...review.likes, { userId: userId }]
-                  return { ...review, likes }
-                }
-                return review
-              }),
+              data: page.data.filter((review) => review.id !== reviewId),
             })),
           }
         }
@@ -47,30 +35,28 @@ export function useToggleReviewLike(openLibraryId: string, userId?: string) {
 
       return { previousData }
     },
+
     onError: (_err, _vars, context) => {
       queryClient.setQueryData(
         ["reviews", openLibraryId],
         context?.previousData
       )
     },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", openLibraryId] })
     },
   })
 }
 
-export function useToggleReviewLikeUser(reviewUserId: string, userId?: string) {
+export function useDeleteReviewUser(reviewUserId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({
-      reviewId,
-      isLiked,
-    }: {
-      reviewId: string
-      isLiked: boolean
-    }) => toggleReviewLike({ reviewId, isLiked }),
-    onMutate: async ({ reviewId, isLiked }) => {
+    mutationFn: ({ reviewId }: { reviewId: string }) =>
+      deleteReview({ reviewId }),
+
+    onMutate: async ({ reviewId }) => {
       await queryClient.cancelQueries({
         queryKey: ["reviews", reviewUserId],
       })
@@ -84,15 +70,7 @@ export function useToggleReviewLikeUser(reviewUserId: string, userId?: string) {
             ...oldData,
             pages: oldData.pages.map((page) => ({
               ...page,
-              data: page.data.map((review) => {
-                if (review.id === reviewId) {
-                  const likes = isLiked
-                    ? review.likes.filter((l) => l.userId !== userId)
-                    : [...review.likes, { userId: userId }]
-                  return { ...review, likes }
-                }
-                return review
-              }),
+              data: page.data.filter((review) => review.id !== reviewId),
             })),
           }
         }
@@ -100,9 +78,11 @@ export function useToggleReviewLikeUser(reviewUserId: string, userId?: string) {
 
       return { previousData }
     },
+
     onError: (_err, _vars, context) => {
       queryClient.setQueryData(["reviews", reviewUserId], context?.previousData)
     },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", reviewUserId] })
     },

@@ -1,36 +1,43 @@
 "use client"
 
+import ActionReviewDialog from "@/components/books/reviews/action-review-dialog"
+import LoadingDots from "@/components/loading-dots"
 import { AnimatedButton } from "@/components/ui/animated-button"
 import { AnimatedCard } from "@/components/ui/animated-card"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookReviews, Review } from "@/lib/types/review"
-import { Heart, Star } from "lucide-react"
+import { fetchReviewsByUser } from "@/lib/api"
+import { useToggleReviewLikeUser } from "@/lib/hooks/use-toggle-review-like"
+import { UserReview, UserReviews } from "@/lib/types/review"
+import { formatDate } from "@/lib/utils"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { Edit3, Heart, Star } from "lucide-react"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { fetchReviewsByBook } from "@/lib/api"
-import LoadingDots from "@/components/loading-dots"
-import { useToggleReviewLike } from "@/lib/hooks/use-toggle-review-like"
-import { formatDate } from "@/lib/utils"
-import ActionReviewDialog from "./action-review-dialog"
 
 interface ReviewsContainerProps {
   isLogged: boolean
   userId?: string
-  openLibraryId: string
+  reviewUserId: string
+  userName: string
 }
 
 interface ReviewComponentProps {
-  review: Review
+  review: UserReview
   userId?: string
   isLogged: boolean
+  reviewUserId: string
 }
 
-function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
+function ReviewComponent({
+  review,
+  userId, // logged user id
+  isLogged,
+  reviewUserId, // the review owner
+}: ReviewComponentProps) {
   const isLiked = review.likes.some((like) => like.userId === userId)
 
-  const { mutate: toggleLike, isPending } = useToggleReviewLike(
-    review.openLibraryId,
+  const { mutate: toggleLike, isPending } = useToggleReviewLikeUser(
+    reviewUserId,
     userId
   )
 
@@ -59,9 +66,6 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
           <h4 className="font-semibold">{review.title}</h4>
           <div className="flex items-center gap-2 mt-1">
             <div className="flex">{renderStars(review.rating)}</div>
-            <span className="text-sm text-muted-foreground">
-              by {review.user.name}
-            </span>
           </div>
         </div>
         <div className="flex">
@@ -81,10 +85,10 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
               {review.likes.length}
             </AnimatedButton>
           )}
-          {isLogged && review.userId === userId && (
+          {isLogged && reviewUserId === userId && (
             <ActionReviewDialog
-              contextId={review.openLibraryId}
-              contextType="book"
+              contextId={reviewUserId}
+              contextType="user"
               review={review}
             />
           )}
@@ -101,7 +105,8 @@ function ReviewComponent({ review, userId, isLogged }: ReviewComponentProps) {
 export default function ReviewsContainer({
   isLogged,
   userId,
-  openLibraryId,
+  reviewUserId,
+  userName,
 }: ReviewsContainerProps) {
   const { ref, inView } = useInView()
 
@@ -112,10 +117,10 @@ export default function ReviewsContainer({
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfiniteQuery<BookReviews>({
-    queryKey: ["reviews", openLibraryId],
+  } = useInfiniteQuery<UserReviews>({
+    queryKey: ["reviews", reviewUserId],
     queryFn: ({ pageParam }) =>
-      fetchReviewsByBook(openLibraryId, pageParam as string),
+      fetchReviewsByUser(reviewUserId, pageParam as string),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     initialPageParam: undefined,
   })
@@ -148,6 +153,7 @@ export default function ReviewsContainer({
                 review={review}
                 isLogged={isLogged}
                 userId={userId}
+                reviewUserId={reviewUserId}
                 key={review.id}
               />
             ))}
@@ -157,12 +163,10 @@ export default function ReviewsContainer({
         ) : (
           <div className="text-center py-8">
             <Star className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-muted-foreground">No reviews yet.</p>
-            {isLogged && (
-              <p className="text-sm text-muted-foreground mt-1">
-                Be the first to write a review!
-              </p>
-            )}
+            <h3 className="text-lg font-semibold mb-2">No reviews yet</h3>
+            <p className="text-muted-foreground">
+              {userName} hasn&apos;t written any reviews yet.
+            </p>
           </div>
         )}
       </CardContent>

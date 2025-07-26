@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
         pathname: "/**",
         search: "",
       },
+      {
+        protocol: "https",
+        hostname: "bookmusecdn.hsm-gustavo.dev",
+        port: "",
+        pathname: "/**",
+        search: "",
+      },
     ],
   },
 }

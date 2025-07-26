@@ -67,6 +67,7 @@ export default function DetailsHeader({
                   openLibraryId={
                     book.workId || book.isbn13?.[0] || book.isbn10?.[0] || ""
                   }
+                  userId={userId!}
                 />
               </div>
             )}

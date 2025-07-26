@@ -19,7 +19,7 @@ export default function ProfileContent({ userProfile }: ProfileContentProps) {
             <Star className="h-5 w-5" />
             Recent Reviews
           </CardTitle>
-          <Link href="/reviews">
+          <Link href={`/reviews/user/${userProfile.id}`}>
             <AnimatedButton variant="outline" size="sm">
               View All Reviews
             </AnimatedButton>

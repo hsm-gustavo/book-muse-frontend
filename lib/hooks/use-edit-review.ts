@@ -1,27 +1,29 @@
 import {
-  type InfiniteData,
+  InfiniteData,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query"
-import { toggleReviewLike } from "../api"
-import { BookReviews, UserReviews } from "../types/review"
+import { BookReviews, EditReview, UserReviews } from "../types/review"
+import { editReview } from "../api"
 
-export function useToggleReviewLike(openLibraryId: string, userId?: string) {
+export function useEditReview(openLibraryId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: ({
       reviewId,
-      isLiked,
+      payload,
     }: {
       reviewId: string
-      isLiked: boolean
-    }) => toggleReviewLike({ reviewId, isLiked }),
-    onMutate: async ({ reviewId, isLiked }) => {
+      payload: EditReview
+    }) => editReview({ reviewId, payload }),
+
+    onMutate: async ({ reviewId, payload }) => {
       await queryClient.cancelQueries({
         queryKey: ["reviews", openLibraryId],
       })
 
+      // Snapshot the previous value
       const previousData = queryClient.getQueryData(["reviews", openLibraryId])
 
       queryClient.setQueryData(
@@ -33,10 +35,13 @@ export function useToggleReviewLike(openLibraryId: string, userId?: string) {
               ...page,
               data: page.data.map((review) => {
                 if (review.id === reviewId) {
-                  const likes = isLiked
-                    ? review.likes.filter((l) => l.userId !== userId)
-                    : [...review.likes, { userId: userId }]
-                  return { ...review, likes }
+                  return {
+                    ...review,
+                    title: payload.title,
+                    description: payload.description,
+                    rating: payload.rating,
+                    updatedAt: new Date().toISOString(),
+                  }
                 }
                 return review
               }),
@@ -47,30 +52,33 @@ export function useToggleReviewLike(openLibraryId: string, userId?: string) {
 
       return { previousData }
     },
+
     onError: (_err, _vars, context) => {
       queryClient.setQueryData(
         ["reviews", openLibraryId],
         context?.previousData
       )
     },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", openLibraryId] })
     },
   })
 }
 
-export function useToggleReviewLikeUser(reviewUserId: string, userId?: string) {
+export function useEditReviewUser(reviewUserId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: ({
       reviewId,
-      isLiked,
+      payload,
     }: {
       reviewId: string
-      isLiked: boolean
-    }) => toggleReviewLike({ reviewId, isLiked }),
-    onMutate: async ({ reviewId, isLiked }) => {
+      payload: EditReview
+    }) => editReview({ reviewId, payload }),
+
+    onMutate: async ({ reviewId, payload }) => {
       await queryClient.cancelQueries({
         queryKey: ["reviews", reviewUserId],
       })
@@ -86,10 +94,13 @@ export function useToggleReviewLikeUser(reviewUserId: string, userId?: string) {
               ...page,
               data: page.data.map((review) => {
                 if (review.id === reviewId) {
-                  const likes = isLiked
-                    ? review.likes.filter((l) => l.userId !== userId)
-                    : [...review.likes, { userId: userId }]
-                  return { ...review, likes }
+                  return {
+                    ...review,
+                    title: payload.title,
+                    description: payload.description,
+                    rating: payload.rating,
+                    updatedAt: new Date().toISOString(),
+                  }
                 }
                 return review
               }),
@@ -100,9 +111,11 @@ export function useToggleReviewLikeUser(reviewUserId: string, userId?: string) {
 
       return { previousData }
     },
+
     onError: (_err, _vars, context) => {
       queryClient.setQueryData(["reviews", reviewUserId], context?.previousData)
     },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", reviewUserId] })
     },

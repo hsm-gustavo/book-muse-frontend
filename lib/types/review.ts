@@ -38,10 +38,28 @@ export interface Review {
   likes: ReviewLike[]
 }
 
+export interface UserReview {
+  id: string
+  title: string
+  description: string
+  rating: number // 0-5
+  openLibraryId: string
+  createdAt: string
+  updatedAt: string
+  userId: string
+  likes: ReviewLike[]
+}
+
+export interface UserReviews {
+  data: UserReview[]
+  nextCursor?: string
+  hasNextPage: boolean
+}
+
 export interface BookReviews {
   data: Review[]
   nextCursor?: string
-  hasNextPage: true
+  hasNextPage: boolean
 }
 
 export interface GenericReview {
@@ -50,4 +68,10 @@ export interface GenericReview {
   rating: number
   description: string
   createdAt: string
+}
+
+export interface EditReview {
+  title: string
+  description: string
+  rating: number
 }
