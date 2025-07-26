@@ -1,0 +1,77 @@
+export interface MyReview {
+  id: string
+  title: string
+  description: string
+  rating: number
+  openLibraryId: string
+  createdAt: string
+  updatedAt: string
+  likeCount: number
+  likedByMe: boolean
+  author: {
+    id: string
+    name: string
+    profilePicture: string
+  }
+}
+
+export interface ReviewUser {
+  id: string
+  name: string
+  profilePicture?: string
+}
+
+export interface ReviewLike {
+  userId: string
+}
+
+export interface Review {
+  id: string
+  title: string
+  description: string
+  rating: number // 0-5
+  openLibraryId: string
+  createdAt: string
+  updatedAt: string
+  userId: string
+  user: ReviewUser
+  likes: ReviewLike[]
+}
+
+export interface UserReview {
+  id: string
+  title: string
+  description: string
+  rating: number // 0-5
+  openLibraryId: string
+  createdAt: string
+  updatedAt: string
+  userId: string
+  likes: ReviewLike[]
+}
+
+export interface UserReviews {
+  data: UserReview[]
+  nextCursor?: string
+  hasNextPage: boolean
+}
+
+export interface BookReviews {
+  data: Review[]
+  nextCursor?: string
+  hasNextPage: boolean
+}
+
+export interface GenericReview {
+  id: string
+  title: string
+  rating: number
+  description: string
+  createdAt: string
+}
+
+export interface EditReview {
+  title: string
+  description: string
+  rating: number
+}
